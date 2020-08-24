@@ -1,0 +1,6 @@
+Pillow==7.0.0
+pyAesCrypt==0.4.3
+pyfiglet==0.8.post1
+tqdm==4.43.0
+ttkthemes==3.1.1
+
