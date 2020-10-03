@@ -21,6 +21,7 @@
 # SOFTWARE.
 # ============================================================================================
 
+import os
 import lsbSteg
 import tkinter as tk
 import tkinter.ttk as ttk
@@ -40,7 +41,9 @@ class pyHide:
         root.minsize(700, 700)
         root.title('PyHide')
         # icon made by : https://www.flaticon.com/authors/becris
-        ico = Image.open('icon.png')
+        root_dir = os.path.dirname(os.path.dirname(__file__))
+        ico_file = os.path.join(root_dir, "icon.png")
+        ico = Image.open(ico_file)
         photo = ImageTk.PhotoImage(ico)
         root.wm_iconphoto(False, photo)
 
