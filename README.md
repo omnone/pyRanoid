@@ -68,7 +68,7 @@ python3 pyHide/main.py
 
 The message will be shown in the dialogue body.
 
-![Decoding](https://i.imgur.com/xAINxyg.png
+![Decoding](https://i.imgur.com/xAINxyg.png)
 
 
 3. You can export the message by checking `Export to file`.
