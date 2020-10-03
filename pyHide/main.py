@@ -40,7 +40,7 @@ class pyHide:
         root.minsize(700, 700)
         root.title('PyHide')
         # icon made by : https://www.flaticon.com/authors/becris
-        ico = Image.open('icon.png')
+        ico = Image.open('../icon.png')
         photo = ImageTk.PhotoImage(ico)
         root.wm_iconphoto(False, photo)
 
