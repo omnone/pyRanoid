@@ -22,16 +22,18 @@
 # ============================================================================================
 
 import os
-import lsbSteg
+import sys
+import threading
 import tkinter as tk
 import tkinter.ttk as ttk
-from tkinter.filedialog import askdirectory
 from tkinter import filedialog
-import threading
-from ttkthemes import ThemedTk
-import sys
+
+import lsbSteg
 import pyfiglet
 from PIL import ImageTk, Image
+from ttkthemes import ThemedTk
+
+
 # ============================================================================================
 
 
