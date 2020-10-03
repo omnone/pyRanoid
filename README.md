@@ -37,7 +37,7 @@ If you Havent already got python, get it from here: https://www.python.org/downl
 
 the encoded image is in the same folder as main.py 
 
-<img src="docs/img/encoding2.png" width="500" height="510">
+<img src="docs/img/encoding2.png" width="500" height="300">
 
 #### Decoding
 
