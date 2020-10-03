@@ -31,6 +31,7 @@ from ttkthemes import ThemedTk
 import sys
 import pyfiglet
 from PIL import ImageTk, Image
+import os.path
 # ============================================================================================
 
 
@@ -40,7 +41,9 @@ class pyHide:
         root.minsize(700, 700)
         root.title('PyHide')
         # icon made by : https://www.flaticon.com/authors/becris
-        ico = Image.open('icon.png')
+        current_directory = os.path.dirname(__file__)
+        parent_directory = os.path.split(current_directory)[0]
+        ico = Image.open(os.path.join(parent_directory, 'icon.png'))
         photo = ImageTk.PhotoImage(ico)
         root.wm_iconphoto(False, photo)
 
