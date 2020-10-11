@@ -54,7 +54,7 @@ class pyHide:
         self.frame.grid(row=0, column=1, rowspan=5, pady=30, padx=10)
 
         # -----------------------------------------------
-        self.dirLabel = ttk.Label(self.frame, font=25, text="Image Path:")
+        self.dirLabel = ttk.Label(self.frame, font=25, f)
         self.dirLabel.grid(row=0, column=0, sticky=tk.W)
 
         self.imagePathEntry = ttk.Entry(self.frame, font=40, width="50")
@@ -77,11 +77,11 @@ class pyHide:
         self.radioEncode = ttk.Radiobutton(
             self.frame, text="Encode", variable=self.radioOption, value='Encode', command=lambda: self.radioBtnCallback('Encode'))
 
-        self.radioEncode.grid(row=2, column=0)
+        self.radioEncode.grid(row=2, column=1, sticky = tk.W)
 
         self.radioDecode = ttk.Radiobutton(
             self.frame, text="Decode", variable=self.radioOption, value='Decode', command=lambda: self.radioBtnCallback('Decode'))
-        self.radioDecode.grid(row=2, column=1, sticky=tk.W)
+        self.radioDecode.grid(row=2, column=1)
 
         self.textArea = tk.Text(self.frame, height=30,
                                 width=40, bg="black", fg="purple", insertbackground="purple")
