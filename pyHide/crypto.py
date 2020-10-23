@@ -29,11 +29,15 @@ bufferSize = 64 * 1024
 
 # ============================================================================================
 
-def encryptText(data, gui):
+def encryptText(message,gui=None, **kwargs):
     """Encrypt text using AES"""
-    password = gui.passwordEntry.get().strip('\n')
-    # binary data to be encrypted
-    pbdata = str.encode(data)
+
+    if gui:
+        password = gui.passwordEntry.get().strip('\n')
+    elif 'password' in kwargs:
+        password = kwargs['password']
+    # binary message to be encrypted
+    pbdata = str.encode(message)
 
     # input plaintext binary stream
     fIn = io.BytesIO(pbdata)
@@ -49,13 +53,17 @@ def encryptText(data, gui):
 
 # ============================================================================================
 
-def decryptText(data, gui):
+def decryptText(message,gui=None, **kwargs):
     """Decrypt text using AES"""
-    password = gui.passwordEntry.get().strip('\n')
+    if gui:
+        password = gui.passwordEntry.get().strip('\n')
+    elif 'password' in kwargs:
+        password = kwargs['password']
+
     # initialize decrypted binary stream
     fDec = io.BytesIO()
 
-    encrypted = io.BytesIO(eval(data))
+    encrypted = io.BytesIO(eval(message))
 
     # get ciphertext length
     ctlen = len(encrypted.getvalue())
@@ -66,8 +74,8 @@ def decryptText(data, gui):
     # decrypt stream
     pyAesCrypt.decryptStream(encrypted, fDec, password, bufferSize, ctlen)
 
-    # print decrypted data
-    # print("Decrypted data:\n" + str(fDec.getvalue()))
+    # print decrypted message
+    # print("Decrypted message:\n" + str(fDec.getvalue()))
 
     return str(fDec.getvalue(), "utf-8")
 
