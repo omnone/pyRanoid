@@ -41,15 +41,14 @@ def intToBin(x):
 # ============================================================================================
 
 
-def encodeImage(image_path, text,gui=None, **kwargs):
+def encodeImage(image_path, text, gui=None, **kwargs):
 
     if gui:
         text = crypto.encryptText(text, gui)
         gui.btnOpImage['state'] = 'disable'
     elif 'password' in kwargs:
-        # password = kwargs['password']
         print('[*]Encoding..')
-        text = crypto.encryptText(text, password =  kwargs['password'])
+        text = crypto.encryptText(text, password=kwargs['password'])
 
     try:
         data = stringToBin(text)
@@ -73,7 +72,7 @@ def encodeImage(image_path, text,gui=None, **kwargs):
                     img.putpixel((x, y), tuple(pixel))
 
             img.save('secret.png', 'PNG')
-        
+
         if gui:
             gui.textArea.insert(tk.END, '\n[+]Encoding finished!')
         else:
@@ -86,19 +85,17 @@ def encodeImage(image_path, text,gui=None, **kwargs):
     finally:
         if gui:
             gui.btnOpImage['state'] = 'normal'
-        
 
 
 # ============================================================================================
 
 
-def decodeImage(image_path,gui=None, **kwargs):
-    
+def decodeImage(image_path, gui=None, **kwargs):
+
     if gui:
         gui.btnOpImage['state'] = 'disable'
     else:
         print('[*]Decoding..')
-
 
     try:
         extractedBin = []
@@ -121,7 +118,6 @@ def decodeImage(image_path,gui=None, **kwargs):
         decodedMessage = binaryMessage.to_bytes(
             (binaryMessage.bit_length() + 7) // 8, 'big').decode()
 
-
         if gui:
             decodedMessage = crypto.decryptText(decodedMessage, gui)
 
@@ -130,11 +126,13 @@ def decodeImage(image_path,gui=None, **kwargs):
 
             if gui.exportOpt.get() == 1:
                 with open('pyhide_output.txt', 'w') as text_file:
-                    print(f'Decoded Message:\n {decodedMessage}', file=text_file)
+                    print(
+                        f'Decoded Message:\n {decodedMessage}', file=text_file)
         elif 'password' in kwargs:
-            decodedMessage = crypto.decryptText(decodedMessage, password =  kwargs['password'])
+            decodedMessage = crypto.decryptText(
+                decodedMessage, password=kwargs['password'])
             print(f'[+]Decrypted Message:\n {decodedMessage}')
-
+            return decodedMessage
 
     except Exception as e:
         if gui:
