@@ -26,6 +26,10 @@
 from PIL import Image
 import tkinter as tk
 import crypto
+import pyAesCrypt
+import filetype
+import os
+
 # ============================================================================================
 
 
@@ -41,7 +45,11 @@ def intToBin(x):
 # ============================================================================================
 
 
-def encodeImage(image_path, text, gui=None, **kwargs):
+def encodeImage(imagePath, text, gui=None, **kwargs):
+
+    if os.path.isfile(text):
+        encodeFile(imagePath, text, kwargs['password'])
+        return
 
     if gui:
         text = crypto.encryptText(text, gui)
@@ -56,7 +64,7 @@ def encodeImage(image_path, text, gui=None, **kwargs):
 
         data = format(len(lenData), 'b').zfill(8)+lenData + data
 
-        with Image.open(image_path) as img:
+        with Image.open(imagePath) as img:
             width, height = img.size
 
             i = 0
@@ -90,7 +98,14 @@ def encodeImage(image_path, text, gui=None, **kwargs):
 # ============================================================================================
 
 
-def decodeImage(image_path, gui=None, **kwargs):
+def decodeImage(imagePath, gui=None, **kwargs):
+
+    with open(imagePath, 'rb') as f:
+        data = f.read().split(b'aescrypt')[0]
+
+    if data:
+        decodeFile(imagePath, kwargs['password'])
+        return
 
     if gui:
         gui.btnOpImage['state'] = 'disable'
@@ -99,7 +114,7 @@ def decodeImage(image_path, gui=None, **kwargs):
 
     try:
         extractedBin = []
-        with Image.open(image_path) as img:
+        with Image.open(imagePath) as img:
             width, height = img.size
 
             for x in range(0, width):
@@ -143,4 +158,41 @@ def decodeImage(image_path, gui=None, **kwargs):
         if gui:
             gui.btnOpImage['state'] = 'normal'
 
+
 # ============================================================================================
+bufferSize = 64 * 1024
+
+
+def encodeFile(imagePath, targetFile, password):
+    print('file')
+    ext = targetFile.split('.')[-1]
+
+    pyAesCrypt.encryptFile(targetFile,
+                           'temp.'+ext, password, bufferSize)
+
+    with open(imagePath, 'wb') as out:
+        out.write(open('temp.'+ext, 'rb').read() +
+                  b'aescrypt,fileextension:'+ext.encode())
+
+    os.remove('temp.'+ext)
+
+
+def decodeFile(imagePath, password):
+    print('file')
+
+    with open(imagePath, 'rb') as f:
+        ext = f.read().split(b'fileextension:')[1].decode()
+        f.seek(0)
+        data = f.read().split(b'aescrypt')[0]
+
+        if ext is None:
+            print('Cannot guess file type!')
+        else:
+            print('File extension: %s' % ext)
+        with open('temp.'+ext, 'wb') as f1:
+            f1.write(data)
+
+    pyAesCrypt.decryptFile('temp.'+ext,
+                           'resultFile.'+ext, password, bufferSize)
+
+    os.remove('temp.'+ext)
