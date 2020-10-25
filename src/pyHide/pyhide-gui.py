@@ -77,11 +77,11 @@ class pyHide:
         self.radioEncode = ttk.Radiobutton(
             self.frame, text="Encode", variable=self.radioOption, value='Encode', command=lambda: self.radioBtnCallback('Encode'))
 
-        self.radioEncode.grid(row=2, column=1,sticky=tk.W)
+        self.radioEncode.grid(row=2, column=1, sticky=tk.W)
 
         self.radioDecode = ttk.Radiobutton(
             self.frame, text="Decode", variable=self.radioOption, value='Decode', command=lambda: self.radioBtnCallback('Decode'))
-        self.radioDecode.grid(row=2, column=1,sticky=tk.E)
+        self.radioDecode.grid(row=2, column=1, sticky=tk.E)
 
         self.textArea = tk.Text(self.frame, height=30,
                                 width=40, bg="black", fg="purple", insertbackground="purple")
