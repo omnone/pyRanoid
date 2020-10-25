@@ -48,6 +48,7 @@ def encryptText(message,gui=None, **kwargs):
     # encrypt stream
     pyAesCrypt.encryptStream(fIn, fCiph, password, bufferSize)
 
+
     return str(fCiph.getvalue())
 
 
