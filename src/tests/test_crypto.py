@@ -1,10 +1,11 @@
-import crypto
 import unittest
 import sys
 import os
 testDir = os.path.dirname(__file__)
 srcDir = '../pyHide'
 sys.path.insert(0, os.path.abspath(os.path.join(testDir, srcDir)))
+
+import crypto
 
 
 class TestCrypto(unittest.TestCase):
@@ -18,7 +19,7 @@ class TestCrypto(unittest.TestCase):
         self.assertNotEqual(result, message)
 
     def test_decryptText(self):
-         """
+        """
         Test that text get decrypted based on AES
         """
         expectedResult = 'test'

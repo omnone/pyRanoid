@@ -1,6 +1,8 @@
 Pillow==7.0.0
 pyAesCrypt==0.4.3
 pyfiglet==0.8.post1
+PyInquirer==1.0.3
+prompt-toolkit==1.0.14
 tqdm==4.43.0
 ttkthemes==3.1.1
-
+termcolor==1.1.0
