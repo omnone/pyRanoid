@@ -1,10 +1,10 @@
 # PyHide :lock:
-PyHide allows you to encrypt your data using [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) encryption and then to encode it/hide it to an PNG image using lsb [steganography](https://en.wikipedia.org/wiki/Steganography) algorithm. 
+PyHide allows you to encrypt your data , text or even a file, using [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) encryption and then to encode it/hide it to an PNG image using an lsb [steganography](https://en.wikipedia.org/wiki/Steganography) algorithm. 
 
 <img src="screenshot.png" width="500" height="510">
 
 
-# Installation
+## Installation
 
 1. Clone the repository to any folder.
 
@@ -24,5 +24,13 @@ cd ./pyHide
 pip install -r requirements.txt
 ```
 
+## Usage
+TBD
 
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
+Please make sure to update tests as appropriate.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
