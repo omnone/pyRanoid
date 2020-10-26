@@ -1,7 +1,7 @@
 # PyHide :lock: ![Tests](https://github.com/omnone/pyHide/workflows/Tests/badge.svg)
 PyHide allows you to encrypt your data , text or even a file, using [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) encryption and then to encode it/hide it to an PNG image using an lsb [steganography](https://en.wikipedia.org/wiki/Steganography) algorithm. 
 
-<img src="screenshot.png" width="500" height="510">
+<img src="screenshot.png" width="300" height="310">
 
 
 ## Installation
