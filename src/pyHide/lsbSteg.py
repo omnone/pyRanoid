@@ -101,9 +101,9 @@ def encodeImage(imagePath, text, gui=None, **kwargs):
 def decodeImage(imagePath, gui=None, **kwargs):
 
     with open(imagePath, 'rb') as f:
-        data = f.read().split(b'aescrypt')[0]
+        data = f.read().split(b'aescrypt')
 
-    if data:
+    if len(data) > 1:
         decodeFile(imagePath, kwargs['password'])
         return
 
@@ -164,7 +164,7 @@ bufferSize = 64 * 1024
 
 
 def encodeFile(imagePath, targetFile, password):
-    print('file')
+
     ext = targetFile.split('.')[-1]
 
     pyAesCrypt.encryptFile(targetFile,
@@ -178,7 +178,6 @@ def encodeFile(imagePath, targetFile, password):
 
 
 def decodeFile(imagePath, password):
-    print('file')
 
     with open(imagePath, 'rb') as f:
         ext = f.read().split(b'fileextension:')[1].decode()
