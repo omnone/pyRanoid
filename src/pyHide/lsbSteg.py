@@ -27,7 +27,6 @@ from PIL import Image
 import tkinter as tk
 import crypto
 import pyAesCrypt
-import filetype
 import os
 
 # ============================================================================================
@@ -184,10 +183,6 @@ def decodeFile(imagePath, password):
         f.seek(0)
         data = f.read().split(b'aescrypt')[0]
 
-        if ext is None:
-            print('Cannot guess file type!')
-        else:
-            print('File extension: %s' % ext)
         with open('temp.'+ext, 'wb') as f1:
             f1.write(data)
 
