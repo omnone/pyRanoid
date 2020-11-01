@@ -5,6 +5,24 @@ from os import path
 from prompt_toolkit.validation import Validator, ValidationError
 import sys
 from termcolor import colored
+import time
+
+import itertools
+import threading
+import time
+import sys
+
+done = False
+#here is the animation
+def animate(mode):
+    for c in itertools.cycle(['|', '/', '-', '\\']):
+        if done:
+            break
+        sys.stdout.write(f'\r[*]{mode} .. ' + c)
+        sys.stdout.flush()
+        time.sleep(0.1)
+    sys.stdout.write(f'\r\n[+]{mode} finished!  ')
+
 
 
 class PathValidator(Validator):
@@ -18,7 +36,7 @@ class PathValidator(Validator):
 
 print("\n========================================================")
 print(pyfiglet.figlet_format('pyHide')+'\n')
-print(colored('github.com/omnone/pyHide', 'cyan'))
+print(colored('(github.com/omnone/pyHide)', 'cyan'))
 print("\n========================================================")
 
 questions = [
@@ -49,6 +67,7 @@ questions = [
         'message': 'Enter message:',
         'when': lambda userInput: userInput['op'] != 'Decode Image' and userInput['op'] != 'Quit'
     },
+    
 
 ]
 
@@ -58,10 +77,26 @@ print("\n========================================================")
 
 if userInput['op'] == 'Encode Image':
     message = userInput['message']
-    lsbSteg.encodeImage(
-        userInput['imgPath'], userInput['message'], password=userInput['passw'])
+    
+    t = threading.Thread(target=animate,args=["Encoding"],daemon=True)
+    t.start()
+
+    lsbSteg.encodeImage(userInput['imgPath'], userInput['message'], password=userInput['passw'])
+    
+    time.sleep(5)
+    done = True
+    
 elif userInput['op'] == 'Decode Image':
-    mess = lsbSteg.decodeImage(
+
+    t = threading.Thread(target=animate,args=["Decoding"],daemon=True)
+    t.start()
+
+    decodedMessage = lsbSteg.decodeImage(
         userInput['imgPath'], password=userInput['passw'])
+        
+    time.sleep(5)
+    done = True
+    print(f'\n[+]Decrypted Message:\n {decodedMessage}')
+
 else:
     sys.exit(0)

@@ -54,7 +54,7 @@ def encodeImage(imagePath, text, gui=None, **kwargs):
         text = crypto.encryptText(text, gui)
         gui.btnOpImage['state'] = 'disable'
     elif 'password' in kwargs:
-        print('[*]Encoding..')
+        # print('[*]Encoding..')
         text = crypto.encryptText(text, password=kwargs['password'])
 
     try:
@@ -82,8 +82,8 @@ def encodeImage(imagePath, text, gui=None, **kwargs):
 
         if gui:
             gui.textArea.insert(tk.END, '\n[+]Encoding finished!')
-        else:
-            print('\n[+]Encoding finished!')
+        # else:
+        #     print('\n[+]Encoding finished!')
     except Exception as e:
         if gui:
             gui.textArea.insert(tk.END, f'\n[-]Exception occured: {e}')
@@ -92,6 +92,8 @@ def encodeImage(imagePath, text, gui=None, **kwargs):
     finally:
         if gui:
             gui.btnOpImage['state'] = 'normal'
+        else:
+            return True
 
 
 # ============================================================================================
@@ -99,17 +101,20 @@ def encodeImage(imagePath, text, gui=None, **kwargs):
 
 def decodeImage(imagePath, gui=None, **kwargs):
 
-    with open(imagePath, 'rb') as f:
-        data = f.read().split(b'aescrypt')
+    try:
+        with open(imagePath, 'rb') as f:
+            data = f.read().split(b'aescrypt')
 
-    if len(data) > 1:
-        decodeFile(imagePath, kwargs['password'])
-        return
+        if len(data) > 1:
+            return decodeFile(imagePath, kwargs['password'])
+    except FileNotFoundError:
+        pass
 
+    
     if gui:
         gui.btnOpImage['state'] = 'disable'
-    else:
-        print('[*]Decoding..')
+    # else:
+    #     print('[*]Decoding..')
 
     try:
         extractedBin = []
@@ -145,7 +150,6 @@ def decodeImage(imagePath, gui=None, **kwargs):
         elif 'password' in kwargs:
             decodedMessage = crypto.decryptText(
                 decodedMessage, password=kwargs['password'])
-            print(f'[+]Decrypted Message:\n {decodedMessage}')
             return decodedMessage
 
     except Exception as e:
@@ -165,13 +169,14 @@ bufferSize = 64 * 1024
 def encodeFile(imagePath, targetFile, password):
 
     ext = targetFile.split('.')[-1]
+    filename = os.path.basename(targetFile)
 
     pyAesCrypt.encryptFile(targetFile,
                            'temp.'+ext, password, bufferSize)
 
-    with open(imagePath, 'wb') as out:
+    with open('secret.png', 'wb') as out:
         out.write(open('temp.'+ext, 'rb').read() +
-                  b'aescrypt,fileextension:'+ext.encode())
+                  b'aescrypt,fileextension:'+ext.encode()+b',filename:'+filename.encode())
 
     os.remove('temp.'+ext)
 
@@ -179,14 +184,18 @@ def encodeFile(imagePath, targetFile, password):
 def decodeFile(imagePath, password):
 
     with open(imagePath, 'rb') as f:
-        ext = f.read().split(b'fileextension:')[1].decode()
-        f.seek(0)
+        # ext = f.read().split(b'fileextension:')[1].decode()
+        # f.seek(0)
         data = f.read().split(b'aescrypt')[0]
+        f.seek(0)
+        filename = f.read().split(b'filename:')[1].decode()
+        ext = filename.split('.')[-1]
 
         with open('temp.'+ext, 'wb') as f1:
             f1.write(data)
 
-    pyAesCrypt.decryptFile('temp.'+ext,
-                           'resultFile.'+ext, password, bufferSize)
-
-    os.remove('temp.'+ext)
+    pyAesCrypt.decryptFile('temp.'+ext,filename, password, bufferSize)
+                           
+    os.remove('temp.' + ext)
+    return filename
+    
