@@ -1,4 +1,4 @@
-Pillow==7.0.0
+Pillow
 pyAesCrypt==0.4.3
 pyfiglet==0.8.post1
 PyInquirer==1.0.3

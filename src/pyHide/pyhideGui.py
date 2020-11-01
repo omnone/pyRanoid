@@ -31,6 +31,7 @@ from ttkthemes import ThemedTk
 import sys
 import pyfiglet
 from PIL import ImageTk, Image
+import os
 # ============================================================================================
 
 
@@ -40,7 +41,7 @@ class pyHide:
         root.minsize(700, 700)
         root.title('PyHide')
         # icon made by : https://www.flaticon.com/authors/becris
-        ico = Image.open('../icon.png')
+        ico = Image.open(os.path.abspath('../../icon.png'))
         photo = ImageTk.PhotoImage(ico)
         root.wm_iconphoto(False, photo)
 
@@ -103,7 +104,7 @@ class pyHide:
         # --------------------------------------------------------------------------------------------
         # cancel button
         self.btnCancel = ttk.Button(self.frame, text="Exit", width=8,
-                                    command=lambda: sys.exit(1))
+                                    command=lambda: sys.exit(0))
         self.btnCancel.grid(row=6, column=2, sticky=tk.W, pady=10)
 
         root.mainloop()
