@@ -20,41 +20,92 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 # ============================================================================================
-
 import pyAesCrypt
 import io
-import tkinter as tk
-
-bufferSize = 64 * 1024
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_v1_5 as Cipher_PKCS1_v1_5
+bufferSize = 264 * 1024
 
 # ============================================================================================
 
-def encryptText(message,gui=None, **kwargs):
-    """Encrypt text using AES"""
 
+def generateRSAKeys(gui=None, **kwargs):
+    if gui:
+         password = gui.passwordEntry.get().strip('\n')
+    elif 'password' in kwargs:
+         password = kwargs['password']
+
+    keypair = RSA.generate(2048)
+    publicKey = keypair.publickey()
+
+    with open("publicKey.pem", "wb") as file:
+        file.write(publicKey.exportKey('PEM'))
+        file.close()
+
+    with open("privateKey.pem", "wb") as file:
+        file.write(keypair.exportKey('PEM'))
+        file.close()
+
+# ============================================================================================
+
+
+def encryptRSA(plaintext, filename):
+
+    with open(filename, "rb") as file:
+        publicKey = RSA.importKey(file.read())
+
+    rsaCipher = Cipher_PKCS1_v1_5.new(publicKey)
+    cipherText = rsaCipher.encrypt(plaintext.encode())
+
+    return cipherText
+
+# ============================================================================================
+
+
+def decryptRSA(filename, cipherText, gui=None, **kwargs):
+    if gui:
+        password = gui.passwordEntry.get().strip('\n')
+    elif 'password' in kwargs:
+        password = kwargs['password']
+
+    with open(filename, "rb") as file:
+        private_key = RSA.importKey(file.read())
+
+    rsaCipher = Cipher_PKCS1_v1_5.new(private_key)
+    decryptedText = rsaCipher.decrypt(cipherText, None)
+
+    return decryptedText
+
+# ============================================================================================
+
+
+def encryptText(message, gui=None, **kwargs):
+    """Encrypt text using AES"""
     if gui:
         password = gui.passwordEntry.get().strip('\n')
     elif 'password' in kwargs:
         password = kwargs['password']
     # binary message to be encrypted
-    pbdata = str.encode(message)
+    if gui and gui.rsaOption.get() == 1:
+        pbdata = encryptRSA(message, gui.rsaKeyPath)
+    else:
+        pbdata = str.encode(message)
+
 
     # input plaintext binary stream
     fIn = io.BytesIO(pbdata)
 
-    # initialize ciphertext binary stream
+    # initialize cipherText binary stream
     fCiph = io.BytesIO()
 
     # encrypt stream
     pyAesCrypt.encryptStream(fIn, fCiph, password, bufferSize)
 
-
     return str(fCiph.getvalue())
 
 
 # ============================================================================================
-
-def decryptText(message,gui=None, **kwargs):
+def decryptText(message, gui=None, **kwargs):
     """Decrypt text using AES"""
     if gui:
         password = gui.passwordEntry.get().strip('\n')
@@ -66,10 +117,10 @@ def decryptText(message,gui=None, **kwargs):
 
     encrypted = io.BytesIO(eval(message))
 
-    # get ciphertext length
+    # get cipherText length
     ctlen = len(encrypted.getvalue())
 
-    # go back to the start of the ciphertext stream
+    # go back to the start of the cipherText stream
     encrypted.seek(0)
 
     # decrypt stream
@@ -77,8 +128,9 @@ def decryptText(message,gui=None, **kwargs):
 
     # print decrypted message
     # print("Decrypted message:\n" + str(fDec.getvalue()))
-
-    return str(fDec.getvalue(), "utf-8")
-
+    if gui and gui.rsaOption.get() == 1:
+        return str(decryptRSA(gui.rsaKeyPath, fDec.getvalue(),gui), "utf-8")
+    else:
+        return str(fDec.getvalue(), "utf-8")
 
 # ============================================================================================
