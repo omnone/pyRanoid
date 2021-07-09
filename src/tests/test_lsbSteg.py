@@ -3,7 +3,7 @@ import sys
 import os
 
 testDir = os.path.dirname(__file__)
-srcDir = '../pyHide'
+srcDir = '../pyRanoid'
 sys.path.insert(0, os.path.abspath(os.path.join(testDir, srcDir)))
 
 import lsbSteg
@@ -23,7 +23,7 @@ class TestLsbSteg(unittest.TestCase):
         Test that image encoding works for encoding text.
         """
         message = 'test'
-        lsbSteg.encodeImage(
+        lsbSteg.encryptImage(
             'screenshot.png', message, password='test')
 
         self.assertTrue(os.path.exists('secret.png'))
@@ -33,7 +33,7 @@ class TestLsbSteg(unittest.TestCase):
         Test decoding works and gives back the right text message
         """
         message = 'test'
-        result = lsbSteg.decodeImage('secret.png', password='test')
+        result = lsbSteg.decryptImage('secret.png', password='test')
 
         os.remove('secret.png')
 
@@ -49,7 +49,7 @@ class TestLsbSteg(unittest.TestCase):
         
         filePath = os.path.abspath("test.txt")
 
-        lsbSteg.encodeImage('screenshot.png', filePath, password='test')
+        lsbSteg.encryptImage('screenshot.png', filePath, password='test')
         self.assertTrue(os.path.exists('secret.png'))
 
     def test_lsbSteg4(self):
@@ -58,7 +58,7 @@ class TestLsbSteg(unittest.TestCase):
         """
         message = 'test'
         
-        result = lsbSteg.decodeImage('secret.png', password='test')
+        result = lsbSteg.decryptImage('secret.png', password='test')
         
         f = open(result, "r")
         result = f.read()

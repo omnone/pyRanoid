@@ -35,8 +35,8 @@ class PathValidator(Validator):
 
 
 print("\n========================================================")
-print(pyfiglet.figlet_format('pyHide')+'\n')
-print(colored('(github.com/omnone/pyHide)', 'cyan'))
+print(pyfiglet.figlet_format('pyRanoid')+'\n')
+print(colored('(github.com/omnone/pyRanoid)', 'cyan'))
 print("\n========================================================")
 
 questions = [
@@ -44,7 +44,7 @@ questions = [
         'type': 'list',
         'name': 'op',
         'message': 'Select operation:',
-        'choices': ['Encode Image', 'Decode Image', 'Quit'],
+        'choices': ['encrypt Image', 'decrypt Image', 'Quit'],
     },
     {
         'type': 'input',
@@ -65,7 +65,7 @@ questions = [
         'type': 'input',
         'name': 'message',
         'message': 'Enter message:',
-        'when': lambda userInput: userInput['op'] != 'Decode Image' and userInput['op'] != 'Quit'
+        'when': lambda userInput: userInput['op'] != 'decrypt Image' and userInput['op'] != 'Quit'
     },
     
 
@@ -75,28 +75,28 @@ userInput = prompt(questions)
 
 print("\n========================================================")
 
-if userInput['op'] == 'Encode Image':
+if userInput['op'] == 'encrypt Image':
     message = userInput['message']
     
     t = threading.Thread(target=animate,args=["Encoding"],daemon=True)
     t.start()
 
-    lsbSteg.encodeImage(userInput['imgPath'], userInput['message'], password=userInput['passw'])
+    lsbSteg.encryptImage(userInput['imgPath'], userInput['message'], password=userInput['passw'])
     
     time.sleep(5)
     done = True
     
-elif userInput['op'] == 'Decode Image':
+elif userInput['op'] == 'decrypt Image':
 
     t = threading.Thread(target=animate,args=["Decoding"],daemon=True)
     t.start()
 
-    decodedMessage = lsbSteg.decodeImage(
+    decryptedMessage = lsbSteg.decryptImage(
         userInput['imgPath'], password=userInput['passw'])
         
     time.sleep(5)
     done = True
-    print(f'\n[+]Decrypted Message:\n {decodedMessage}')
+    print(f'\n[+]Decrypted Message:\n {decryptedMessage}')
 
 else:
     sys.exit(0)

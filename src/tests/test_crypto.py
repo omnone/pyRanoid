@@ -2,7 +2,7 @@ import unittest
 import sys
 import os
 testDir = os.path.dirname(__file__)
-srcDir = '../pyHide'
+srcDir = '../pyRanoid'
 sys.path.insert(0, os.path.abspath(os.path.join(testDir, srcDir)))
 
 import crypto

@@ -1,7 +1,7 @@
-# PyHide :lock: ![Tests](https://github.com/omnone/pyHide/workflows/Tests/badge.svg) ![CodeQL](https://github.com/omnone/pyHide/workflows/CodeQL/badge.svg)
-PyHide allows you to encrypt your data , text or even a file, using [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) encryption and then to encode it/hide it to an PNG image using an lsb [steganography](https://en.wikipedia.org/wiki/Steganography) algorithm. 
+# PyRanoid :lock: ![Tests](https://github.com/omnone/pyRanoid/workflows/Tests/badge.svg) ![CodeQL](https://github.com/omnone/pyRanoid/workflows/CodeQL/badge.svg)
+**PyRanoid** allows you to **encrypt your data** , text or even a file, using [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) encryption and then to encode it/hide it to an PNG image using an lsb [steganography](https://en.wikipedia.org/wiki/Steganography) algorithm. If you feel extra paranoid you can add some RSA encryption on top. Currently RSA encryption is only supported throught the GUI version.
 
-<img src="screenshot.png" width="300" height="310">
+<img src="screenshot.png" width="550" height="510">
 
 
 ## Installation
@@ -9,13 +9,13 @@ PyHide allows you to encrypt your data , text or even a file, using [AES](https:
 1. Clone the repository to any folder.
 
 ```
-git clone https://github.com/omnone/pyHide/
+git clone https://github.com/omnone/pyRanoid/
 ```
 
-2. Change directory into pyHide root folder.
+2. Change directory into pyRanoid root folder.
 
 ```
-cd ./pyHide
+cd ./pyRanoid
 ```
 
 3. Install Python requirements
