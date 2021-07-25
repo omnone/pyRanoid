@@ -1,7 +1,7 @@
 # PyRanoid :lock: ![Tests](https://github.com/omnone/pyRanoid/workflows/Tests/badge.svg) ![CodeQL](https://github.com/omnone/pyRanoid/workflows/CodeQL/badge.svg)
 **PyRanoid** allows you to **encrypt your data** , text or even a file, using [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) encryption and then to encode it/hide it to an PNG image using an lsb [steganography](https://en.wikipedia.org/wiki/Steganography) algorithm. If you feel extra paranoid you can add some RSA encryption on top. Currently RSA encryption is only supported throught the GUI version. Currently tested only on Windows 10 with python 3.9.
 
-<img src="screenshot.png" width="550" height="510">
+<img src="screenshot.png" width="750" height="510">
 
 
 ## Installation
