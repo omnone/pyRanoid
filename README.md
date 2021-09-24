@@ -3,6 +3,9 @@
 
 <img src="screenshot.png" width="750" height="510">
 
+## Notes
+1. There is no low-level memory management in Python, hence it is not possible to wipe memory areas were sensitive information was stored.
+2. This project is still a proof of concept , so bugs may exist. If you find anything don't hasitate to open an issue.
 
 ## Installation
 
