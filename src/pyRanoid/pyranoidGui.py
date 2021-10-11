@@ -31,15 +31,21 @@ import sys
 import pyfiglet
 from PIL import ImageTk, Image
 import os
-from crypto import generateRSAKeys
+from encryption import generateRSAKeys, encryptRSA
 # ============================================================================================
+
+
 class pyRanoid:
     def __init__(self, root, image=None):
 
         root.minsize(500, 500)
-        root.title('PyRanoid')
+        root.title("PyRanoid")
+        root.resizable(True, True)
         # icon made by : https://www.flaticon.com/authors/becris
-        ico = Image.open(os.path.abspath('../../icon.png'))
+        try:
+            ico = Image.open("././icon.png")
+        except:
+            pass
         photo = ImageTk.PhotoImage(ico)
         root.wm_iconphoto(False, photo)
 
@@ -54,12 +60,12 @@ class pyRanoid:
 
         self.inputsFrame = ttk.Frame(root,  borderwidth=1, relief=tk.SUNKEN)
         self.inputsFrame.grid(row=0, column=1, rowspan=5,
-                              columnspan=10, pady=30, padx=30)
-        self.inputsFrame['padding'] = (5, 20, 5, 20)
+                              columnspan=10, pady=10, padx=30)
+        self.inputsFrame["padding"] = (5, 20, 5, 20)
 
-        self.outputsFrame = ttk.Frame(root,borderwidth=1, relief=tk.SUNKEN)
-        self.outputsFrame.grid(row=7, column=1, rowspan=8, pady=30, padx=10)
-        self.outputsFrame['padding'] = (5, 0, 5, 0)
+        self.outputsFrame = ttk.Frame(root, borderwidth=1, relief=tk.SUNKEN)
+        self.outputsFrame.grid(row=6, column=1, rowspan=8, pady=5, padx=10)
+        self.outputsFrame["padding"] = (5, 0, 5, 0)
 
         self.imageFrame = ttk.Frame(self.inputsFrame)
         self.imageFrame.grid(row=2, column=2, rowspan=10,
@@ -74,10 +80,10 @@ class pyRanoid:
         self.operationDropDown = ttk.Combobox(
             self.inputsFrame, textvariable=self.opTypeStr, state="readonly",  width=27)
         self.operationDropDown.grid(row=1, column=0, sticky=tk.W)
-        self.operationDropDown['values'] = ('encrypt', 'decrypt')
+        self.operationDropDown["values"] = ("encrypt", "decrypt")
         self.operationDropDown.current(0)
         self.operationDropDown.bind(
-            '<<ComboboxSelected>>', lambda event: self.operationTypeChanged())
+            "<<ComboboxSelected>>", lambda event: self.operationTypeChanged())
 
         # --------------------------------------------------------------------------------------------
         # Input type combobox
@@ -87,10 +93,10 @@ class pyRanoid:
         self.inputTypeDropDown = ttk.Combobox(
             self.inputsFrame, textvariable=self.inputTypeStr, state="readonly",  width=27)
         self.inputTypeDropDown.grid(row=1, column=1, sticky=tk.W)
-        self.inputTypeDropDown['values'] = ('File', 'Text')
+        self.inputTypeDropDown["values"] = ("File", "Text")
         self.inputTypeDropDown.current(0)
         self.inputTypeDropDown.bind(
-            '<<ComboboxSelected>>', lambda event: self.inputTypeChanged())
+            "<<ComboboxSelected>>", lambda event: self.inputTypeChanged())
 
         # --------------------------------------------------------------------------------------------
         # Image selection
@@ -151,15 +157,15 @@ class pyRanoid:
 
         # --------------------------------------------------------------------------------------------
         # Text area
-        self.textArea = tk.Text(self.outputsFrame, height=20,
-                                width=70, bg="black", fg="purple", insertbackground="purple")
-        self.textArea.config(state='normal')
+        self.textArea = tk.Text(self.outputsFrame, height=18,
+                                width=95, bg="black", fg="purple", insertbackground="purple")
+        self.textArea.config(state="normal")
         self.textArea.grid(row=8, column=1, columnspan=3, rowspan=2,
                            sticky=tk.W+tk.E+tk.N+tk.S, pady=5)
 
         # # --------------------------------------------------------------------------------------------
         # # ascii banner
-        self.ascii_banner = pyfiglet.figlet_format('pyRanoid')
+        self.ascii_banner = pyfiglet.figlet_format("pyRanoid")
         self.textArea.insert(
             tk.END, self.ascii_banner+"\n========================================================")
 
@@ -183,14 +189,14 @@ class pyRanoid:
 
     def imageSteg(self):
         """encrypt/decrypt operations on selected image"""
-        if(self.inputTypeStr.get() == 'Text'):
+        if(self.inputTypeStr.get() == "Text"):
             self.valueToEncrypt = self.messageEntry.get()
         else:
             self.valueToEncrypt = self.targetFilePath
 
-        if self.opTypeStr.get() == 'encrypt':
+        if self.opTypeStr.get() == "encrypt":
             # encrypt message to the selected image
-            self.textArea.insert(tk.END, "\n[*]Encoding...")
+            self.textArea.insert(tk.END, "\n[*]Encrypting...")
             self.subThread = threading.Thread(
                 target=lsbSteg.encryptImage, args=(self.imagePathEntry.get(), self.valueToEncrypt, self))
             self.progressBar.grid(row=5, column=1, columnspan=1, sticky=tk.W)
@@ -198,9 +204,16 @@ class pyRanoid:
             self.subThread.start()
             self.root.after(100, self.checkThread)
 
+            # if (self.rsaOption.get() == 1):
+            #     encryptedPswd = encryptRSA(
+            #         self.passwordEntry.get().strip("\n"),self.rsaKeyPath)
+            #     self.textArea.insert(
+            #         tk.END, "\n[+]Encrypted Password: ")
+            #     print(<encryptedPswd)
+
         else:
             # decrypt message from the selected image
-            self.textArea.insert(tk.END, f"\n[*]Decoding {self.imagePath}")
+            self.textArea.insert(tk.END, f"\n[*]Decrypting {self.imagePath}")
 
             self.subThread = threading.Thread(
                 target=lsbSteg.decryptImage, args=(self.imagePathEntry.get(), self))
@@ -230,7 +243,18 @@ class pyRanoid:
         self.subThread.start()
         self.root.after(100, self.checkThread)
         self.textArea.insert(tk.END, f"\n[+]RSA keys have been generated.")
-        
+        basePath = os.path.dirname(__file__)
+        publicKeyPath = os.path.join(basePath, "publicKey.pem")
+        privateKeyPath = os.path.join(basePath, "privateKey.pem")
+
+        self.textArea.insert(tk.END, "\n"+publicKeyPath)
+        self.textArea.insert(tk.END, "\n"+privateKeyPath)
+        text = self.opTypeStr.get()
+
+        self.rsaKeyPath = publicKeyPath if text == "encrypt" else privateKeyPath
+        self.rsaKeyPathEntry.insert(tk.INSERT, self.rsaKeyPath)
+
+    # --------------------------------------------------------------------------------------------
 
     def rsaSupport(self):
         if (self.rsaOption.get() == 1):
@@ -239,7 +263,7 @@ class pyRanoid:
             self.btnChooseRsaKeyDir.grid(row=10, column=1, sticky=tk.W)
             self.generateRsaKeysBtn.grid(row=10, column=2, sticky=tk.W)
             try:
-                self.btnOpImage['state'] = 'disabled'
+                self.btnOpImage["state"] = "disabled"
             except:
                 pass
         else:
@@ -248,11 +272,11 @@ class pyRanoid:
             self.btnChooseRsaKeyDir.grid_remove()
             self.generateRsaKeysBtn.grid_remove()
 
-
     # --------------------------------------------------------------------------------------------
+
     def inputTypeChanged(self):
         text = self.inputTypeStr.get()
-        if(text == 'Text'):
+        if(text == "Text"):
             self.messageLabel.grid(row=4, column=0, sticky=tk.W)
             self.messageEntry.grid(row=5, column=0, sticky=tk.W)
             self.targetDirLabel.grid_remove()
@@ -296,7 +320,8 @@ class pyRanoid:
         """Open an image from a directory"""
         # Select the Imagename  from a folder
         tk.Tk().withdraw()
-        self.imagePath = filedialog.askopenfilename(title='Open Image',filetypes = [("Image Files", ".png .jpg .jpeg .svg")])
+        self.imagePath = filedialog.askopenfilename(title="Open Image", filetypes=[
+                                                    ("Image Files", ".png .jpg .jpeg .svg")])
         self.imagePathEntry.delete(0, tk.END)
         self.imagePathEntry.insert(tk.INSERT, self.imagePath)
 
@@ -317,31 +342,32 @@ class pyRanoid:
         self.panel.grid(row=6, column=3, padx=5)
 
         try:
-            self.btnOpImage['state'] = 'normal'
+            self.btnOpImage["state"] = "normal"
         except:
             pass
 
     def selectTargetFile(self):
         """Select file to encrypt from a directory"""
         tk.Tk().withdraw()
-        self.targetFilePath = filedialog.askopenfilename(title='Select File')
+        self.targetFilePath = filedialog.askopenfilename(title="Select File")
         self.targetPathEntry.delete(0, tk.END)
         self.targetPathEntry.insert(tk.INSERT, self.targetFilePath)
 
         try:
-            self.btnOpImage['state'] = 'normal'
+            self.btnOpImage["state"] = "normal"
         except:
             pass
 
     def selectRsaKeyFile(self):
         """Select file to encrypt from a directory"""
         tk.Tk().withdraw()
-        self.rsaKeyPath = filedialog.askopenfilename(title='Select RSA key file',defaultextension=".pem",filetypes = [("RSA key files", ".pem")])
+        self.rsaKeyPath = filedialog.askopenfilename(
+            title="Select RSA key file", defaultextension=".pem", filetypes=[("RSA key files", ".pem")])
         self.rsaKeyPathEntry.delete(0, tk.END)
         self.rsaKeyPathEntry.insert(tk.INSERT, self.rsaKeyPath)
 
         try:
-            self.btnOpImage['state'] = 'normal'
+            self.btnOpImage["state"] = "normal"
         except:
             pass
 
