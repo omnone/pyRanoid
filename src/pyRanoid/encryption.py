@@ -30,10 +30,11 @@ bufferSize = 264 * 1024
 
 
 def generateRSAKeys(gui=None, **kwargs):
+    """Generates RSA Keys"""
     if gui:
-         password = gui.passwordEntry.get().strip('\n')
+        password = gui.passwordEntry.get().strip('\n')
     elif 'password' in kwargs:
-         password = kwargs['password']
+        password = kwargs['password']
 
     keypair = RSA.generate(2048)
     publicKey = keypair.publickey()
@@ -46,10 +47,12 @@ def generateRSAKeys(gui=None, **kwargs):
         file.write(keypair.exportKey('PEM'))
         file.close()
 
+
 # ============================================================================================
 
 
 def encryptRSA(plaintext, filename):
+    """Encrypts text using RSA"""
 
     with open(filename, "rb") as file:
         publicKey = RSA.importKey(file.read())
@@ -63,6 +66,8 @@ def encryptRSA(plaintext, filename):
 
 
 def decryptRSA(filename, cipherText, gui=None, **kwargs):
+    """Decrypt text using RSA"""
+
     if gui:
         password = gui.passwordEntry.get().strip('\n')
     elif 'password' in kwargs:
@@ -90,7 +95,6 @@ def encryptText(message, gui=None, **kwargs):
         pbdata = encryptRSA(message, gui.rsaKeyPath)
     else:
         pbdata = str.encode(message)
-
 
     # input plaintext binary stream
     fIn = io.BytesIO(pbdata)
@@ -126,10 +130,8 @@ def decryptText(message, gui=None, **kwargs):
     # decrypt stream
     pyAesCrypt.decryptStream(encrypted, fDec, password, bufferSize, ctlen)
 
-    # print decrypted message
-    # print("Decrypted message:\n" + str(fDec.getvalue()))
     if gui and gui.rsaOption.get() == 1:
-        return str(decryptRSA(gui.rsaKeyPath, fDec.getvalue(),gui), "utf-8")
+        return str(decryptRSA(gui.rsaKeyPath, fDec.getvalue(), gui), "utf-8")
     else:
         return str(fDec.getvalue(), "utf-8")
 

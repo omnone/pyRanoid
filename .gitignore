@@ -1,3 +1,4 @@
 secret.png
 __pycache__
 .vscode
+*.pem
