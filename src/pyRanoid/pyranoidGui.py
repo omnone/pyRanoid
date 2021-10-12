@@ -42,12 +42,15 @@ class pyRanoid:
         root.title("PyRanoid")
         root.resizable(True, True)
         # icon made by : https://www.flaticon.com/authors/becris
+        self.basePath = os.path.dirname(__file__)
+        iconPath = os.path.join(self.basePath, "../../icon.png")
         try:
-            ico = Image.open("././icon.png")
+            ico = Image.open(os.path.abspath(os.path.realpath(iconPath)))
         except:
             pass
-        photo = ImageTk.PhotoImage(ico)
-        root.wm_iconphoto(False, photo)
+        else:
+            photo = ImageTk.PhotoImage(ico)
+            root.wm_iconphoto(False, photo)
 
         self.checkboxExport = None
         self.exportOpt = 0
@@ -310,6 +313,7 @@ class pyRanoid:
                 self.inputsFrame, text="Export to file", variable=self.exportOpt)
             self.checkboxExport.grid(row=2, column=2, sticky=tk.E)
 
+        # encrypt/decrypt button
         self.btnOpImage = ttk.Button(self.inputsFrame, text=text, width=8,
                                      command=lambda: self.imageSteg(), state="normal" if self.imagePath else "disabled")
         self.btnOpImage.grid(row=1, column=2)
