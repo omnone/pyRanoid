@@ -5,7 +5,7 @@
 
 ## Notes
 1. There is no low-level memory management in Python, hence it is not possible to wipe memory areas were sensitive information was stored.
-2. This project is still a proof of concept , so bugs may exist. If you find anything don't hasitate to open an issue.
+2. This project is still a proof of concept , so bugs may exist. If you find anything don't hesitate to open an issue.
 
 ## Installation
 
@@ -26,9 +26,7 @@ cd ./pyRanoid
 ```
 pip install -r requirements.txt
 ```
-
-## Usage
-TBD
+*Also you need to have tkinter library installed.
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
