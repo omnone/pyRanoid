@@ -1,4 +1,5 @@
-secret.png
+output.png
 __pycache__
 .vscode
 *.pem
+*.tar.gz*
