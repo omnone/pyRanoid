@@ -18,6 +18,7 @@
 <li>Dependencies (listed in the requirements.txt file)</li>
 <li>OpenSSL</li>
 </ul>
+
 ## Contributing
 Contributions to PyRanoid are welcome! If you encounter any issues or have ideas for enhancements, please feel free to submit a pull request or create an issue in the project's repository.
 
