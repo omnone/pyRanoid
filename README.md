@@ -1,37 +1,24 @@
 # PyRanoid :lock: ![Tests](https://github.com/omnone/pyRanoid/workflows/Tests/badge.svg) ![CodeQL](https://github.com/omnone/pyRanoid/workflows/CodeQL/badge.svg)
-**PyRanoid** allows you to **encrypt your data** , text or even a file, using [AES](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) encryption and then to encode it/hide it to an PNG image using an lsb [steganography](https://en.wikipedia.org/wiki/Steganography) algorithm. If you feel extra paranoid you can add some RSA encryption on top. Currently RSA encryption is only supported throught the GUI version. Currently tested only with Python 3.9.
+**PyRanoid** is a Python program designed to provide advanced encryption and steganography capabilities for your files. It utilizes AES 256 encryption to securely encrypt your files and then employs steganography techniques to hide the encrypted data within an image. Currently tested with Python 3.9.
 
-<img src="screenshot.png" width="750" height="510">
+## Getting Started
+<ol>
+<li>Select the file you want to encrypt and choose the encryption options.</li>
+<li>Provide an image file to serve as the cover image for steganography.</li>
+<li>PyRanoid will encrypt your file (a copy of it) using AES 256 encryption and embed it within the selected image.</li>
+<li>Save the resulting image, which now contains the encrypted data.</li>
+<li>To retrieve the original file, use PyRanoid to extract and decrypt the data from the steganographic image.</li>
+</ol>
 
-## Notes
-1. There is no low-level memory management in Python, hence it is not possible to wipe memory areas were sensitive information was stored.
-2. This project is still a proof of concept , so bugs may exist. If you find anything don't hesitate to open an issue.
+<img src="screenshot.png" width="650" height="410">
 
-## Installation
-
-1. Clone the repository to any folder.
-
-```
-git clone https://github.com/omnone/pyRanoid/
-```
-
-2. Change directory into pyRanoid root folder.
-
-```
-cd ./pyRanoid
-```
-
-3. Install Python requirements
-
-```
-pip install -r requirements.txt
-```
-*Also you need to have tkinter library installed.
+## Requirements
+Python 3.9 or higher
+Dependencies (listed in the requirements.txt file)
+OpenSSL
 
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
+Contributions to PyRanoid are welcome! If you encounter any issues or have ideas for enhancements, please feel free to submit a pull request or create an issue in the project's repository.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
