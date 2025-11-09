@@ -2,7 +2,7 @@
 
 ![Tests](https://github.com/omnone/pyRanoid/workflows/Tests/badge.svg) ![Python](https://img.shields.io/badge/python-3.11+-blue.svg) ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-**pyRanoid** is a Python application that combines advanced encryption and steganography to securely hide your files within images. Using AES-256-CBC or RSA encryption and LSB (Least Significant Bit) steganography, pyRanoid ensures your sensitive data remains both encrypted and concealed.
+**pyRanoid** is a Python tool for secure file concealment. It uses LSB steganography to hide files inside images. The file data is encrypted with AES-256-CBC. The program supports two methods for generating the AES key: either using a hardcoded user password or generating a random one. In the latter case, the random password is securely encrypted using RSA keys before use. This combination of RSA, AES, and steganography ensures your sensitive data is both encrypted and hidden from plain sight.
 
 <img src="screenshot.png" width="650" height="410">
 
