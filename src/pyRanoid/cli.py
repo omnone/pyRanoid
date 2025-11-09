@@ -33,7 +33,7 @@ console = Console()
 def print_banner():
     """Print the application banner."""
 
-    banner = textwrap.dedent("""
+    banner = textwrap.dedent(r"""
                      ____                   _     _                                                                                       
          _ __  _   _|  _ \ __ _ _ __   ___ (_) __| |                                                                                      
         | '_ \| | | | |_) / _` | '_ \ / _ \| |/ _` |                                                                                     
