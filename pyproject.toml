@@ -1,0 +1,36 @@
+[project]
+name = "pyranoid"
+version = "1.0.0"
+description = "A Python program providing advanced encryption and steganography capabilities for files"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Konstantinos Bourantas", email = "github.com.disarm005@passmail.net" }
+]
+dependencies = [
+    "Pillow",
+    "cryptography>=41.0.0",
+    "pygobject>=3.54.5",
+    "setuptools>=80.9.0",
+    "numpy>=2.3.4",
+    "rich>=14.2.0",
+]
+
+[project.scripts]
+pyranoid = "pyRanoid.cli:main"
+pyranoid-gui = "pyRanoid.gui:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pyRanoid"]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.0.0",
+    "pytest-mock>=3.12.0",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.14.4",
+]

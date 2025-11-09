@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<!-- Optimized UI for PyRanoid v2.0 -->
+<interface>
+  <requires lib="gtk+" version="3.0"/>
+  <object class="GtkWindow" id="window">
+    <property name="can-focus">False</property>
+    <property name="title">PyRanoid - Steganography Tool</property>
+    <property name="window-position">center</property>
+    <property name="default-width">1200</property>
+    <property name="default-height">700</property>
+    <property name="margin">0</property>
+    <signal name="destroy" handler="gtk_main_quit" swapped="no"/>
+    <child>
+      <object class="GtkBox" id="main_box">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">0</property>
+        <property name="margin">0</property>
+        <child>
+          <object class="GtkBox" id="config_preview_box">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="spacing">12</property>
+            <property name="margin">12</property>
+            <child>
+              <object class="GtkFrame" id="inputs_frame">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label-xalign">0.019999999552965164</property>
+                <property name="shadow-type">out</property>
+                <property name="label" translatable="yes">Configuration</property>
+                <property name="margin">0</property>
+                <property name="hexpand">True</property>
+                <child>
+                  <object class="GtkBox" id="inputs_frame_box">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">12</property>
+                    <property name="margin">16</property>
+                    <property name="hexpand">True</property>
+                    <child>
+                      <object class="GtkBox" id="op_section">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="spacing">16</property>
+                        <property name="halign">fill</property>
+                        <child>
+                          <object class="GtkBox" id="op_container">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">6</property>
+                            <child>
+                              <object class="GtkLabel" id="op_label">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="tooltip-text" translatable="yes">Choose whether to encrypt a file into an image or decrypt a file from an image.</property>
+                                <property name="halign">start</property>
+                                <property name="label" translatable="yes">&lt;b&gt;Operation:&lt;/b&gt;</property>
+                                <property name="use-markup">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkComboBoxText" id="op_dropdown">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="tooltip-text" translatable="yes">Select operation type: Encrypt hides a file in an image, Decrypt extracts a hidden file.</property>
+                                <property name="active">0</property>
+                                <property name="width-request">200</property>
+                                <items>
+                                  <item id="0" translatable="yes">Encrypt</item>
+                                  <item id="1" translatable="yes">Decrypt</item>
+                                </items>
+                                <signal name="changed" handler="on_op_dropdown_changed" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="button_box">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="spacing">8</property>
+                            <property name="halign">end</property>
+                            <property name="hexpand">True</property>
+                            <child>
+                              <object class="GtkButton" id="clear_btn">
+                                <property name="label" translatable="yes">Clear</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="tooltip-text" translatable="yes">Clear all fields and reset the form</property>
+                                <signal name="clicked" handler="on_clear_btn_clicked" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="image_op_btn">
+                                <property name="label" translatable="yes">Encrypt</property>
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can-focus">True</property>
+                                <property name="can-default">True</property>
+                                <property name="receives-default">True</property>
+                                <property name="tooltip-text" translatable="yes">Click to start the encryption/decryption process. Ensure all required fields are filled.</property>
+                                <property name="width-request">150</property>
+                                <property name="height-request">40</property>
+                                <signal name="clicked" handler="on_image_op_btn_clicked" swapped="no"/>
+                                <style>
+                                  <class name="suggested-action"/>
+                                </style>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkSeparator" id="separator1">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="img_container">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">8</property>
+                        <child>
+                          <object class="GtkLabel" id="source_img_path_label">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="tooltip-text" translatable="yes">Select the image file to use for steganography (PNG, JPG, or JPEG). You can also drag and drop an image file here.</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Source Image:</property>
+                            <property name="use-markup">True</property>
+                            <property name="margin-bottom">2</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="img_row">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="spacing">10</property>
+                            <child>
+                              <object class="GtkEntry" id="source_img_path_input">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="tooltip-text" translatable="yes">Path to the source image file. Click Browse to select a PNG, JPG, or JPEG image, or drag and drop an image here.</property>
+                                <property name="width-chars">50</property>
+                                <property name="hexpand">True</property>
+                                <property name="placeholder-text" translatable="yes">Select or drag an image file (PNG, JPG, JPEG)...</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="img_picker_btn">
+                                <property name="label" translatable="yes">Browse...</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="can-default">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="tooltip-text" translatable="yes">Browse and select an image file (PNG, JPG, or JPEG).</property>
+                                <property name="width-request">120</property>
+                                <signal name="clicked" handler="on_img_picker_btn_clicked" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="target_container">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">8</property>
+                        <child>
+                          <object class="GtkLabel" id="target_path_label">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="tooltip-text" translatable="yes">Select the files you want to hide inside the image. You can also drag and drop a file here.</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Files to Hide:</property>
+                            <property name="use-markup">True</property>
+                            <property name="margin-bottom">2</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="target_row">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="spacing">10</property>
+                            <child>
+                              <object class="GtkEntry" id="target_path_entry">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="tooltip-text" translatable="yes">Path to the files you want to hide inside the image. Click Browse to select any file, or drag and drop a file here.</property>
+                                <property name="width-chars">50</property>
+                                <property name="hexpand">True</property>
+                                <property name="placeholder-text" translatable="yes">Select or drag a file to hide in the image...</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="target_picker_btn">
+                                <property name="label" translatable="yes">Browse...</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="can-default">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="tooltip-text" translatable="yes">Browse and select files to hide inside the image.</property>
+                                <property name="width-request">120</property>
+                                <signal name="clicked" handler="on_target_picker_btn_clicked" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="password_container">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">8</property>
+                        <child>
+                          <object class="GtkLabel" id="password_label">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="tooltip-text" translatable="yes">Enter a strong password for encryption/decryption. Use a mix of uppercase, lowercase, numbers, and symbols.</property>
+                            <property name="halign">start</property>
+                            <property name="label" translatable="yes">Password:</property>
+                            <property name="use-markup">True</property>
+                            <property name="margin-bottom">2</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="password_row">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="spacing">8</property>
+                            <child>
+                              <object class="GtkEntry" id="password_entry">
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="tooltip-text" translatable="yes">Enter a strong password for encryption/decryption. Use a mix of uppercase, lowercase, numbers, and symbols. Press Enter to execute.</property>
+                                <property name="visibility">False</property>
+                                <property name="width-chars">35</property>
+                                <property name="hexpand">True</property>
+                                <property name="placeholder-text" translatable="yes">Enter a strong password...</property>
+                                <signal name="changed" handler="on_password_entry_changed" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToggleButton" id="password_visibility_btn">
+                                <property name="label">👁</property>
+                                <property name="visible">True</property>
+                                <property name="can-focus">True</property>
+                                <property name="can-default">True</property>
+                                <property name="receives-default">False</property>
+                                <property name="tooltip-text" translatable="yes">Show/Hide password</property>
+                                <signal name="toggled" handler="on_password_visibility_btn_toggled" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="password_strength_label">
+                                <property name="visible">True</property>
+                                <property name="can-focus">False</property>
+                                <property name="halign">start</property>
+                                <property name="margin-start">8</property>
+                                <property name="width-request">100</property>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkCheckButton" id="mode_toggle_btn">
+                            <property name="label" translatable="yes">🔐 Use RSA Keys (instead of password)</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">False</property>
+                            <property name="tooltip-text" translatable="yes">Toggle between password mode and RSA key mode. RSA mode generates a random password and encrypts it with your public key for enhanced security.</property>
+                            <property name="halign">start</property>
+                            <property name="margin-top">8</property>
+                            <signal name="toggled" handler="on_mode_toggle" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkFrame" id="preview_frame">
+                <property name="width-request">300</property>
+                <property name="height-request">300</property>
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="label-xalign">0.029999999329447746</property>
+                <property name="shadow-type">out</property>
+                <property name="label" translatable="yes">Image Preview</property>
+                <property name="margin">0</property>
+                <property name="hexpand">False</property>
+                <child>
+                  <object class="GtkBox" id="preview_box">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">8</property>
+                    <property name="margin">12</property>
+                    <child>
+                      <object class="GtkBox" id="image_frame">
+                        <property name="width-request">270</property>
+                        <property name="height-request">270</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <property name="halign">center</property>
+                        <property name="valign">center</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel" id="preview_placeholder">
+                            <property name="visible">True</property>
+                            <property name="can-focus">False</property>
+                            <property name="opacity">0.4</property>
+                            <property name="label" translatable="yes">No image selected
+
+Drop an image here or click Browse.</property>
+                            <property name="justify">center</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame" id="output_frame">
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="label-xalign">0.019999999552965164</property>
+            <property name="shadow-type">out</property>
+            <property name="label" translatable="yes">Output</property>
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
+            <property name="margin-bottom">12</property>
+            <child>
+              <object class="GtkBox" id="output_frame_box">
+                <property name="visible">True</property>
+                <property name="can-focus">False</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">8</property>
+                <property name="margin">12</property>
+                <child>
+                  <object class="GtkScrolledWindow" id="scrolled">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="min-content-height">250</property>
+                    <property name="shadow-type">in</property>
+                    <property name="hexpand">True</property>
+                    <property name="vexpand">True</property>
+                    <child>
+                      <object class="GtkTextView" id="text_area">
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="editable">False</property>
+                        <property name="wrap-mode">word</property>
+                        <property name="monospace">True</property>
+                        <property name="left-margin">8</property>
+                        <property name="right-margin">8</property>
+                        <property name="top-margin">8</property>
+                        <property name="bottom-margin">8</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkProgressBar" id="progress_bar">
+                    <property name="can-focus">False</property>
+                    <property name="text" translatable="yes">Ready</property>
+                    <property name="show-text">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkStatusbar" id="status_bar">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
