@@ -3,3 +3,10 @@ __pycache__
 .vscode
 *.pem
 *.tar.gz*
+output/
+htmlcov/
+.coverage
+.pytest_cache/
+.ruff_cache/
+.venv/
+dist/
