@@ -20,6 +20,10 @@ Example:
         $ python -m pyRanoid.cli
 """
 
+from .utils import is_private_key_encrypted
+
 __version__ = "2.0.0"
 __author__ = "Konstantinos Bourantas"
 __license__ = "MIT"
+
+__all__ = ["is_private_key_encrypted"]

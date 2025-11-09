@@ -19,12 +19,15 @@ from .utils import (
     generate_rsa_keypair,
     save_private_key,
     save_public_key,
+    is_private_key_encrypted,
 )
 import os
 import textwrap
 
 
 console = Console()
+
+# --------------------------------------------------------------------------------------------
 
 
 def print_banner():
@@ -47,6 +50,9 @@ def print_banner():
     )
 
 
+# --------------------------------------------------------------------------------------------
+
+
 def validate_path(path_str, must_exist=True):
     """Validate that a path exists."""
     path = Path(path_str)
@@ -54,6 +60,9 @@ def validate_path(path_str, must_exist=True):
         console.print(f"[red]Error: Path '{path_str}' does not exist.[/red]")
         sys.exit(1)
     return path_str
+
+
+# --------------------------------------------------------------------------------------------
 
 
 def get_password(verify=False):
@@ -67,12 +76,16 @@ def get_password(verify=False):
     return password
 
 
+# --------------------------------------------------------------------------------------------
+
+
 def get_key_password():
-    """Get password for RSA private key (if encrypted)."""
-    password = getpass.getpass(
-        "Enter RSA private key password (press Enter if not encrypted): "
-    )
+    """Get password for RSA private key (required for encrypted keys)."""
+    password = getpass.getpass("Enter RSA private key password: ")
     return password if password else None
+
+
+# --------------------------------------------------------------------------------------------
 
 
 def encrypt_command(args):
@@ -80,7 +93,6 @@ def encrypt_command(args):
     validate_path(args.image, must_exist=True)
     validate_path(args.target, must_exist=True)
 
-    # Determine encryption mode
     if args.public_key and args.password:
         console.print(
             "[red]Error: Cannot use both --public-key and --password. Choose one mode.[/red]"
@@ -115,7 +127,7 @@ def encrypt_command(args):
             else:
                 password = (
                     args.password
-                    if args.password != True
+                    if args.password is not True
                     else get_password(verify=True)
                 )
                 encrypt_image(
@@ -131,6 +143,9 @@ def encrypt_command(args):
     except Exception as e:
         console.print(f"[red]Error during encryption: {e}[/red]")
         sys.exit(1)
+
+
+# --------------------------------------------------------------------------------------------
 
 
 def decrypt_command(args):
@@ -156,45 +171,85 @@ def decrypt_command(args):
         sys.exit(1)
 
     try:
-        with console.status(
-            f"[bold green]Decrypting {args.image}...[/bold green]", spinner="dots"
-        ):
-            if args.private_key:
-                validate_path(args.private_key, must_exist=True)
-                key_password = (
-                    get_key_password() if not args.key_password else args.key_password
-                )
-                files = decrypt_image(
-                    args.image,
-                    output_dir=args.output_dir,
-                    rsa_private_key_path=args.private_key,
-                    key_password=key_password,
-                )
+        if args.private_key:
+            validate_path(args.private_key, must_exist=True)
+
+            if args.key_password:
+                key_password = args.key_password
+            elif is_private_key_encrypted(args.private_key):
+                key_password = get_key_password()
+                if not key_password:
+                    console.print(
+                        "[red]Error: The private key is encrypted but no password was provided.[/red]"
+                    )
+                    sys.exit(1)
             else:
-                password = (
-                    args.password
-                    if args.password != True
-                    else get_password(verify=False)
-                )
+                key_password = None
+
+            max_attempts = 3
+            for attempt in range(max_attempts):
+                try:
+                    with console.status(
+                        f"[bold green]Decrypting {args.image}...[/bold green]",
+                        spinner="dots",
+                    ):
+                        files = decrypt_image(
+                            args.image,
+                            output_dir=args.output_dir,
+                            rsa_private_key_path=args.private_key,
+                            key_password=key_password,
+                        )
+                    break
+                except ValueError as e:
+                    error_msg = str(e)
+                    if "Incorrect password" in error_msg:
+                        if attempt < max_attempts - 1:
+                            console.print(
+                                f"[red]Incorrect password. Attempt {attempt + 2}/{max_attempts}[/red]"
+                            )
+                            key_password = get_key_password()
+                            if not key_password:
+                                console.print(
+                                    "[red]Error: Password cannot be empty.[/red]"
+                                )
+                                sys.exit(1)
+                        else:
+                            console.print(
+                                f"[red]Error: Maximum attempts reached. {e}[/red]"
+                            )
+                            sys.exit(1)
+                    else:
+                        raise
+        else:
+            password = (
+                args.password
+                if args.password is not True
+                else get_password(verify=False)
+            )
+            with console.status(
+                f"[bold green]Decrypting {args.image}...[/bold green]", spinner="dots"
+            ):
                 files = decrypt_image(
                     args.image,
                     output_dir=args.output_dir,
                     password=password,
                 )
 
-            absolute_output_dir = os.path.abspath(args.output_dir)
-            console.print(
-                f"[green]✓ Successfully extracted file(s) {', '.join(files)} to {absolute_output_dir}[/green]"
-            )
+        absolute_output_dir = os.path.abspath(args.output_dir)
+        console.print(
+            f"[green]✓ Successfully extracted file(s) {', '.join(files)} to {absolute_output_dir}[/green]"
+        )
     except Exception as e:
         console.print(f"[red]Error during decryption: {e}[/red]")
         sys.exit(1)
 
 
+# --------------------------------------------------------------------------------------------
+
+
 def keygen_command(args):
     """Handle the keygen command to generate RSA key pairs."""
     try:
-        # Check if files already exist
         if Path(args.private_key).exists() or Path(args.public_key).exists():
             console.print("[yellow]Warning: Key files already exist.[/yellow]")
             response = input("Overwrite existing keys? (yes/no): ")
@@ -202,7 +257,6 @@ def keygen_command(args):
                 console.print("[yellow]Key generation cancelled.[/yellow]")
                 return
 
-        # Ask if user wants to encrypt the private key
         console.print(
             "[cyan]Do you want to encrypt the private key with a password?[/cyan]"
         )
@@ -240,6 +294,9 @@ def keygen_command(args):
         sys.exit(1)
 
 
+# --------------------------------------------------------------------------------------------
+
+
 def main():
     """Main CLI entry point."""
     print_banner()
@@ -263,7 +320,6 @@ def main():
         help="Output image path (default: output.png)",
     )
 
-    # Encryption mode options (mutually exclusive)
     encrypt_mode = encrypt_parser.add_mutually_exclusive_group(required=True)
     encrypt_mode.add_argument(
         "--public-key",
@@ -292,7 +348,6 @@ def main():
         help="Output directory for extracted files (default: current directory)",
     )
 
-    # Decryption mode options (mutually exclusive)
     decrypt_mode = decrypt_parser.add_mutually_exclusive_group(required=True)
     decrypt_mode.add_argument(
         "--private-key",
@@ -343,6 +398,8 @@ def main():
         parser.print_help()
         sys.exit(0)
 
+
+# --------------------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     main()

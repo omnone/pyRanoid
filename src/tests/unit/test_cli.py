@@ -304,6 +304,103 @@ class TestDecryptCommand:
         with pytest.raises(SystemExit):
             cli.decrypt_command(args)
 
+    @patch("pyRanoid.cli.is_private_key_encrypted")
+    @patch("pyRanoid.cli.decrypt_image")
+    def test_decrypt_command_unencrypted_key_no_prompt(
+        self, mock_decrypt, mock_is_encrypted, test_image, temp_dir, rsa_keypair
+    ):
+        """Test that unencrypted key doesn't prompt for password."""
+        mock_decrypt.return_value = ["file.txt"]
+        mock_is_encrypted.return_value = False  # Key is not encrypted
+
+        output_dir = os.path.join(temp_dir, "output")
+        os.makedirs(output_dir, exist_ok=True)
+
+        args = MagicMock()
+        args.image = test_image
+        args.output_dir = output_dir
+        args.password = None
+        args.private_key = rsa_keypair["private_key_path"]
+        args.key_password = None
+
+        cli.decrypt_command(args)
+
+        # Verify decrypt_image was called with None password
+        mock_decrypt.assert_called_once()
+        call_kwargs = mock_decrypt.call_args[1]
+        assert call_kwargs["key_password"] is None
+
+    @patch("pyRanoid.cli.is_private_key_encrypted")
+    @patch("pyRanoid.cli.get_key_password")
+    @patch("pyRanoid.cli.decrypt_image")
+    def test_decrypt_command_encrypted_key_prompts(
+        self,
+        mock_decrypt,
+        mock_get_key_password,
+        mock_is_encrypted,
+        test_image,
+        temp_dir,
+        rsa_keypair_with_password,
+    ):
+        """Test that encrypted key prompts for password when not provided."""
+        mock_decrypt.return_value = ["file.txt"]
+        mock_is_encrypted.return_value = True  # Key is encrypted
+        mock_get_key_password.return_value = "TestKeyPassword"
+
+        output_dir = os.path.join(temp_dir, "output")
+        os.makedirs(output_dir, exist_ok=True)
+
+        args = MagicMock()
+        args.image = test_image
+        args.output_dir = output_dir
+        args.password = None
+        args.private_key = rsa_keypair_with_password["private_key_path"]
+        args.key_password = None
+
+        cli.decrypt_command(args)
+
+        # Verify get_key_password was called
+        mock_get_key_password.assert_called_once()
+        # Verify decrypt_image was called with the password
+        mock_decrypt.assert_called_once()
+        call_kwargs = mock_decrypt.call_args[1]
+        assert call_kwargs["key_password"] == "TestKeyPassword"
+
+    @patch("pyRanoid.cli.is_private_key_encrypted")
+    @patch("pyRanoid.cli.get_key_password")
+    @patch("pyRanoid.cli.decrypt_image")
+    def test_decrypt_command_encrypted_key_with_cli_password(
+        self,
+        mock_decrypt,
+        mock_get_key_password,
+        mock_is_encrypted,
+        test_image,
+        temp_dir,
+        rsa_keypair_with_password,
+    ):
+        """Test that CLI password is used when provided, no prompt."""
+        mock_decrypt.return_value = ["file.txt"]
+        mock_is_encrypted.return_value = True  # Key is encrypted
+
+        output_dir = os.path.join(temp_dir, "output")
+        os.makedirs(output_dir, exist_ok=True)
+
+        args = MagicMock()
+        args.image = test_image
+        args.output_dir = output_dir
+        args.password = None
+        args.private_key = rsa_keypair_with_password["private_key_path"]
+        args.key_password = "ProvidedPassword"  # Password provided via CLI
+
+        cli.decrypt_command(args)
+
+        # Verify get_key_password was NOT called
+        mock_get_key_password.assert_not_called()
+        # Verify decrypt_image was called with the CLI password
+        mock_decrypt.assert_called_once()
+        call_kwargs = mock_decrypt.call_args[1]
+        assert call_kwargs["key_password"] == "ProvidedPassword"
+
 
 class TestMainFunction:
     """Test the main CLI entry point."""

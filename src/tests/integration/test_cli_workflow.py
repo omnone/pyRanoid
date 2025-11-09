@@ -10,14 +10,12 @@ import sys
 from unittest.mock import MagicMock, patch
 
 import pytest
+import pyRanoid.utils as utils
+from pyRanoid import cli
 
 test_dir = os.path.dirname(__file__)
 src_dir = "../../"
 sys.path.insert(0, os.path.abspath(os.path.join(test_dir, src_dir)))
-
-import pyRanoid.utils as utils
-from pyRanoid import cli
-
 
 @pytest.mark.integration
 class TestCLIIntegrationPasswordMode:

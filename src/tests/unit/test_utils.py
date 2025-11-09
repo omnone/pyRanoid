@@ -10,7 +10,6 @@ Tests all utility functions including:
 import os
 import sys
 import tarfile
-from unittest.mock import MagicMock
 
 import pytest
 
@@ -188,6 +187,55 @@ class TestRSAFunctions:
             encrypted_password, private_key
         )
         assert decrypted_password == original_password
+
+    def test_is_private_key_encrypted_unencrypted(self, temp_dir):
+        """Test detection of unencrypted private key."""
+        private_key, _ = utils.generate_rsa_keypair()
+        key_path = os.path.join(temp_dir, "unencrypted_key.pem")
+
+        utils.save_private_key(private_key, key_path, password=None)
+        assert os.path.exists(key_path)
+
+        is_encrypted = utils.is_private_key_encrypted(key_path)
+        assert not is_encrypted
+
+    def test_is_private_key_encrypted_encrypted(self, temp_dir):
+        """Test detection of encrypted private key."""
+        private_key, _ = utils.generate_rsa_keypair()
+        key_path = os.path.join(temp_dir, "encrypted_key.pem")
+        password = "SecureKeyPassword123!"
+
+        utils.save_private_key(private_key, key_path, password=password)
+        assert os.path.exists(key_path)
+
+        is_encrypted = utils.is_private_key_encrypted(key_path)
+        assert is_encrypted
+
+    def test_load_encrypted_key_without_password(self, temp_dir):
+        """Test that loading encrypted key without password raises clear error."""
+        private_key, _ = utils.generate_rsa_keypair()
+        key_path = os.path.join(temp_dir, "encrypted_key.pem")
+        password = "SecureKeyPassword123!"
+
+        utils.save_private_key(private_key, key_path, password=password)
+
+        with pytest.raises(ValueError) as exc_info:
+            utils.load_private_key(key_path, password=None)
+
+        assert "encrypted but no password was provided" in str(exc_info.value)
+
+    def test_load_encrypted_key_with_wrong_password(self, temp_dir):
+        """Test that loading encrypted key with wrong password raises clear error."""
+        private_key, _ = utils.generate_rsa_keypair()
+        key_path = os.path.join(temp_dir, "encrypted_key.pem")
+        password = "SecureKeyPassword123!"
+
+        utils.save_private_key(private_key, key_path, password=password)
+
+        with pytest.raises(ValueError) as exc_info:
+            utils.load_private_key(key_path, password="WrongPassword")
+
+        assert "Incorrect password" in str(exc_info.value)
 
 
 class TestCryptographicFunctions:

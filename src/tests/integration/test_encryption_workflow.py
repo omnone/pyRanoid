@@ -10,12 +10,11 @@ import sys
 
 import pytest
 from PIL import Image
+import pyRanoid.utils as utils
 
 test_dir = os.path.dirname(__file__)
 src_dir = "../../"
 sys.path.insert(0, os.path.abspath(os.path.join(test_dir, src_dir)))
-
-import pyRanoid.utils as utils
 
 
 @pytest.mark.integration

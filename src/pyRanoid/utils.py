@@ -148,6 +148,41 @@ def save_public_key(public_key, filepath):
 # --------------------------------------------------------------------------------------------
 
 
+def is_private_key_encrypted(filepath):
+    """
+    Check if an RSA private key file is encrypted (password-protected).
+
+    This function examines the PEM file headers to determine if the key
+    is encrypted without attempting to load it.
+
+    :param filepath: Path to the private key file.
+    :type filepath: str
+    :return: True if the key is encrypted, False otherwise.
+    :rtype: bool
+    """
+    with open(filepath, "rb") as f:
+        pem_data = f.read()
+
+    try:
+        pem_str = pem_data.decode("utf-8")
+    except UnicodeDecodeError:
+        return True
+
+    if "BEGIN ENCRYPTED PRIVATE KEY" in pem_str:
+        return True
+
+    if "Proc-Type: 4,ENCRYPTED" in pem_str:
+        return True
+
+    if "BEGIN PRIVATE KEY" in pem_str or "BEGIN RSA PRIVATE KEY" in pem_str:
+        return False
+
+    return True
+
+
+# --------------------------------------------------------------------------------------------
+
+
 def load_private_key(filepath, password=None):
     """
     Load an RSA private key from a file.
@@ -158,15 +193,26 @@ def load_private_key(filepath, password=None):
     :type password: str or None
     :return: The loaded RSA private key.
     :rtype: rsa.RSAPrivateKey
+    :raises ValueError: If the key is encrypted but no password provided, or password is incorrect.
     """
     with open(filepath, "rb") as f:
         pem_data = f.read()
 
     password_bytes = password.encode("utf-8") if password else None
 
-    private_key = serialization.load_pem_private_key(
-        pem_data, password=password_bytes, backend=default_backend()
-    )
+    try:
+        private_key = serialization.load_pem_private_key(
+            pem_data, password=password_bytes, backend=default_backend()
+        )
+    except TypeError as e:
+        raise ValueError(
+            "The private key is encrypted but no password was provided. "
+        ) from e
+    except ValueError as e:
+        error_msg = str(e).lower()
+        if "bad decrypt" in error_msg or "incorrect password" in error_msg:
+            raise ValueError("Incorrect password for the private key.") from e
+        raise
 
     return private_key
 

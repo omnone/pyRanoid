@@ -73,7 +73,7 @@ run-gui:
 lint:
 	@echo "Running linter..."
 	@if command -v ruff >/dev/null 2>&1; then \
-		uv run ruff check src/; \
+		uv run ruff check --fix src/; \
 	else \
 		echo "Ruff not installed. Install with: uv add --dev ruff"; \
 	fi
